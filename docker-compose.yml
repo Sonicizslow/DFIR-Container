@@ -1,0 +1,23 @@
+services:
+  dfir-container:
+    build: .
+    container_name: dfir-investigation
+    ports:
+      - "6080:6080"  # noVNC web interface
+      - "5901:5901"  # VNC server (optional direct access)
+    volumes:
+      # Map host downloads folder as read-only
+      # Adjust this path to match your system's downloads folder
+      - "${HOME}/Downloads:/home/dfiruser/downloads:ro"
+      # Optional: persistent analysis workspace
+      - "./analysis-workspace:/home/dfiruser/analysis"
+    environment:
+      - DISPLAY=:1
+    restart: unless-stopped
+    # Security: run as non-root user
+    user: "1000:1000"  # Adjust UID/GID as needed
+    security_opt:
+      - no-new-privileges:true
+    # Resource limits for security
+    mem_limit: 2g
+    cpus: 2.0
