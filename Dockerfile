@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     # VNC server and web interface
     tightvncserver novnc websockify \
     # Web browsers
-    firefox-esr \
+    firefox \
     # Office and document tools
     libreoffice \
     evince \
