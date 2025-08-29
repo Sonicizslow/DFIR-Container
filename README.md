@@ -76,7 +76,7 @@ Available commands:
 
 ### Available Applications
 
-- **Firefox**: Web browser for link investigation
+- **Firefox**: Web browser for link investigation (run `./install-firefox.sh` as root in container to install working Firefox)
 - **LibreOffice**: Office document analysis
 - **Evince**: PDF viewer
 - **Text Editors**: nano, vim for file inspection
@@ -131,6 +131,11 @@ cpus: 4.0      # Increase CPU cores
 - Click inside the noVNC window to focus it before copying/pasting
 - Use Ctrl+Shift+C/V instead of Ctrl+C/V in some terminal applications
 - Try refreshing the browser page if clipboard sync stops working
+
+### Firefox not working
+- The default Firefox installation is a transitional snap package that may not work in containers
+- To install working Firefox, run as root in the container: `./install-firefox.sh`
+- Alternatively, access the container and run: `docker compose exec dfir-container bash` then run the install script
 
 ## Development
 

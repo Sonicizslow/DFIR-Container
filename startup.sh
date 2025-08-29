@@ -25,7 +25,7 @@ cat > /home/dfiruser/Desktop/firefox.desktop << 'EOF'
 Version=1.0
 Name=Firefox
 Comment=Web Browser
-Exec=firefox-esr
+Exec=firefox
 Icon=firefox
 Terminal=false
 Type=Application

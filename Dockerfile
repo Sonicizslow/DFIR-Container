@@ -10,8 +10,6 @@ RUN apt-get update && apt-get install -y \
     xfce4 xfce4-goodies \
     # VNC server and web interface
     tightvncserver novnc websockify \
-    # Web browsers - install firefox-esr instead of firefox (snap version)
-    firefox-esr \
     # Office and document tools
     libreoffice \
     evince \
@@ -38,8 +36,21 @@ RUN apt-get update && apt-get install -y \
     # System utilities
     sudo \
     supervisor \
+    # Required for installing Firefox manually
+    software-properties-common \
+    gnupg \
+    lsb-release \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Firefox from Mozilla's official repository
+RUN wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | apt-key add - && \
+    echo "deb https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list && \
+    echo 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000' | tee /etc/apt/preferences.d/mozilla && \
+    apt-get update && \
+    apt-get install -y firefox && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
@@ -78,7 +89,7 @@ RUN mkdir -p /home/dfiruser/Desktop && \
 Version=1.0\n\
 Name=Firefox\n\
 Comment=Web Browser\n\
-Exec=firefox-esr\n\
+Exec=firefox\n\
 Icon=firefox\n\
 Terminal=false\n\
 Type=Application\n\
