@@ -84,8 +84,8 @@ RUN chmod +x /usr/local/bin/startup.sh
 RUN echo 'source ~/dfir-tools.sh' >> /home/dfiruser/.bashrc && \
     chown dfiruser:dfiruser /home/dfiruser/.bashrc
 
-# Update ClamAV database
-RUN freshclam
+# Update ClamAV database (allow failure in build environment)
+RUN freshclam || echo "ClamAV update failed in build environment (normal)"
 
 # Set working directory
 WORKDIR /home/dfiruser
