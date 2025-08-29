@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
     xfce4 xfce4-goodies \
     # VNC server and web interface
     tightvncserver novnc websockify \
-    # Web browsers
-    firefox \
+    # Web browsers - install firefox-esr instead of firefox (snap version)
+    firefox-esr \
     # Office and document tools
     libreoffice \
     evince \
@@ -78,7 +78,7 @@ RUN mkdir -p /home/dfiruser/Desktop && \
 Version=1.0\n\
 Name=Firefox\n\
 Comment=Web Browser\n\
-Exec=firefox\n\
+Exec=firefox-esr\n\
 Icon=firefox\n\
 Terminal=false\n\
 Type=Application\n\
