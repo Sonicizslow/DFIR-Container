@@ -8,6 +8,7 @@ The original Docker Compose setup had permission errors that prevented the conta
 chown: changing ownership of '/home/dfiruser/downloads/...': Read-only file system
 chown: changing ownership of '/home/dfiruser/analysis': Operation not permitted  
 Error: Can't drop privilege as nonroot user
+vncserver: The USER environment variable is not set.
 ```
 
 ## Root Cause
@@ -16,6 +17,7 @@ Error: Can't drop privilege as nonroot user
 2. **Permission Setup Failure**: The startup script needed root privileges to set file permissions with `chown`
 3. **Supervisord Privilege Issues**: Supervisord couldn't drop privileges because it was already running as non-root
 4. **Read-only Mount Issues**: The startup script tried to `chown -R` the entire `/home/dfiruser` directory, including read-only mounted volumes
+5. **VNC Environment Variable**: The VNC server required the USER environment variable to be set when running as dfiruser through supervisord
 
 ## Changes Made
 
@@ -31,13 +33,18 @@ Error: Can't drop privilege as nonroot user
 - **Before**: `chown -R dfiruser:dfiruser /home/dfiruser` (failed on read-only mounts)
 - **After**: Selective permission setting on specific files/directories only
 
-### 4. Files Updated
+### 4. VNC Environment Variable Fix
+- **Before**: VNC server failing with "USER environment variable is not set" error
+- **After**: Added `environment=USER=dfiruser` to both vncserver and novnc programs in supervisord.conf
+
+### 5. Files Updated
 - `docker-compose.yml` - Changed mount point and removed user restriction
 - `startup.sh` - Fixed permission handling to avoid read-only volumes  
 - `Dockerfile` - Updated to create phishing directory instead of downloads
 - `README.md` - Updated all documentation references
 - `quick-start.sh` - Updated for phishing directory
 - `.env.example` - Updated path variables
+- `supervisord.conf` - Added USER environment variable for VNC processes
 
 ## Security Model
 
