@@ -1,3 +1,141 @@
 # DFIR-Container
 
-a container to investigate sus things.
+A Docker container for Digital Forensics and Incident Response (DFIR) investigations. This container provides a secure, web-based desktop environment for analyzing suspicious files, links, and attachments such as PDFs and Office documents.
+
+## Features
+
+- **Web-based Access**: Access the container through your browser using noVNC
+- **Non-root Security**: Runs as a non-privileged user for enhanced security
+- **File Analysis Tools**: Includes tools for PDF, Office document, and general file analysis
+- **Malware Scanning**: Built-in ClamAV antivirus scanning
+- **Read-only Downloads**: Maps host downloads folder as read-only for safe file transfer
+- **Copy/Paste Support**: Full clipboard integration with the host browser
+
+## Quick Start
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+- A downloads folder on your host system (typically `~/Downloads`)
+
+### Setup and Launch
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Sonicizslow/DFIR-Container.git
+   cd DFIR-Container
+   ```
+
+2. Start the container:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. Access the container:
+   - Open your web browser
+   - Navigate to `http://localhost:6080`
+   - Click "Connect" to access the desktop environment
+
+## Usage
+
+### Accessing Files
+
+- **Downloads**: Your host downloads folder is mounted at `/home/dfiruser/downloads` (read-only)
+- **Analysis Workspace**: Use `/home/dfiruser/analysis` for your investigation work
+
+### Built-in DFIR Tools
+
+The container includes a helper script with common analysis functions. In the terminal, source the tools:
+
+```bash
+source ~/dfir-tools.sh
+```
+
+Available commands:
+
+- `analyze-pdf <file>` - Analyze PDF files for suspicious content
+- `analyze-office <file>` - Analyze Office documents for macros and suspicious content
+- `scan-malware <file>` - Scan files with ClamAV antivirus
+- `check-url <url>` - Check URL safety and download for analysis
+- `extract-metadata <file>` - Extract metadata from files
+- `hex-view <file>` - View files in hex editor
+- `file-info <file>` - Get detailed file information
+
+### Example Investigation Workflow
+
+1. **File Transfer**: Copy suspicious files to your Downloads folder on the host
+2. **Access Container**: Open browser to `http://localhost:6080`
+3. **Navigate to Files**: Files are available in `/home/dfiruser/downloads`
+4. **Analyze**: Use the built-in tools or GUI applications:
+   ```bash
+   # In the container terminal:
+   source ~/dfir-tools.sh
+   analyze-pdf ~/downloads/suspicious.pdf
+   scan-malware ~/downloads/document.docx
+   ```
+
+### Available Applications
+
+- **Firefox**: Web browser for link investigation
+- **LibreOffice**: Office document analysis
+- **Evince**: PDF viewer
+- **Text Editors**: nano, vim for file inspection
+- **Hex Editors**: hexedit for binary analysis
+
+## Security Considerations
+
+- Container runs as non-root user (`dfiruser`)
+- Downloads folder is mounted read-only
+- Resource limits applied (2GB RAM, 2 CPU cores)
+- No new privileges allowed
+- ClamAV antivirus included for malware detection
+
+## Configuration
+
+### Custom Downloads Path
+
+Edit `docker-compose.yml` to change the downloads folder mapping:
+
+```yaml
+volumes:
+  - "/path/to/your/downloads:/home/dfiruser/downloads:ro"
+```
+
+### Resource Limits
+
+Adjust memory and CPU limits in `docker-compose.yml`:
+
+```yaml
+mem_limit: 4g  # Increase memory
+cpus: 4.0      # Increase CPU cores
+```
+
+## Troubleshooting
+
+### Container won't start
+- Ensure Docker is running
+- Check if ports 6080 and 5901 are available
+- Verify your downloads folder exists
+
+### Can't connect via browser
+- Try `http://localhost:6080/vnc.html`
+- Check if the container is running: `docker-compose ps`
+- Review logs: `docker-compose logs`
+
+### Permission issues
+- Ensure your user ID matches the container user (1000:1000 by default)
+- Check volume mount permissions
+
+## Development
+
+To rebuild the container after making changes:
+
+```bash
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+## License
+
+This project is provided as-is for DFIR and security research purposes.
