@@ -8,7 +8,7 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 - **Non-root Security**: Runs as a non-privileged user for enhanced security
 - **File Analysis Tools**: Includes tools for PDF, Office document, and general file analysis
 - **Malware Scanning**: Built-in ClamAV antivirus scanning
-- **Read-only Downloads**: Maps host downloads folder as read-only for safe file transfer
+- **Read-only Phishing Files**: Maps host phishing folder as read-only for safe file transfer
 - **Copy/Paste Support**: Full clipboard integration with the host browser
 
 ## Quick Start
@@ -16,7 +16,7 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 ### Prerequisites
 
 - Docker and Docker Compose installed
-- A downloads folder on your host system (typically `~/Downloads`)
+- A phishing folder on your host system (typically `~/phishing`)
 
 ### Setup and Launch
 
@@ -40,7 +40,7 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 
 ### Accessing Files
 
-- **Downloads**: Your host downloads folder is mounted at `/home/dfiruser/downloads` (read-only)
+- **Phishing Files**: Your host phishing folder is mounted at `/home/dfiruser/phishing` (read-only)
 - **Analysis Workspace**: Use `/home/dfiruser/analysis` for your investigation work
 
 ### Built-in DFIR Tools
@@ -63,15 +63,15 @@ Available commands:
 
 ### Example Investigation Workflow
 
-1. **File Transfer**: Copy suspicious files to your Downloads folder on the host
+1. **File Transfer**: Copy suspicious files to your phishing folder on the host
 2. **Access Container**: Open browser to `http://localhost:6080`
-3. **Navigate to Files**: Files are available in `/home/dfiruser/downloads`
+3. **Navigate to Files**: Files are available in `/home/dfiruser/phishing`
 4. **Analyze**: Use the built-in tools or GUI applications:
    ```bash
    # In the container terminal:
    source ~/dfir-tools.sh
-   analyze-pdf ~/downloads/suspicious.pdf
-   scan-malware ~/downloads/document.docx
+   analyze-pdf ~/phishing/suspicious.pdf
+   scan-malware ~/phishing/document.docx
    ```
 
 ### Available Applications
@@ -84,21 +84,21 @@ Available commands:
 
 ## Security Considerations
 
-- Container runs as non-root user (`dfiruser`)
-- Downloads folder is mounted read-only
+- Container starts as root for setup, then services run as non-root user (`dfiruser`)  
+- Phishing folder is mounted read-only
 - Resource limits applied (2GB RAM, 2 CPU cores)
 - No new privileges allowed
 - ClamAV antivirus included for malware detection
 
 ## Configuration
 
-### Custom Downloads Path
+### Custom Phishing Path
 
-Edit `docker-compose.yml` to change the downloads folder mapping:
+Edit `docker-compose.yml` to change the phishing folder mapping:
 
 ```yaml
 volumes:
-  - "/path/to/your/downloads:/home/dfiruser/downloads:ro"
+  - "/path/to/your/phishing:/home/dfiruser/phishing:ro"
 ```
 
 ### Resource Limits
@@ -115,7 +115,7 @@ cpus: 4.0      # Increase CPU cores
 ### Container won't start
 - Ensure Docker is running
 - Check if ports 6080 and 5901 are available
-- Verify your downloads folder exists
+- Verify your phishing folder exists
 
 ### Can't connect via browser
 - Try `http://localhost:6080/vnc.html`

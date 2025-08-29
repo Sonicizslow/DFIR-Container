@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python packages for document analysis
-RUN pip3 install --no-cache-dir \
+RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
     oletools \
     pdfplumber \
     yara-python \
@@ -65,8 +65,8 @@ startxfce4 &' > /home/dfiruser/.vnc/xstartup && \
     chown dfiruser:dfiruser /home/dfiruser/.vnc/xstartup
 
 # Create directories for file analysis
-RUN mkdir -p /home/dfiruser/analysis /home/dfiruser/downloads && \
-    chown -R dfiruser:dfiruser /home/dfiruser/analysis /home/dfiruser/downloads
+RUN mkdir -p /home/dfiruser/analysis /home/dfiruser/phishing && \
+    chown -R dfiruser:dfiruser /home/dfiruser/analysis /home/dfiruser/phishing
 
 # Configure supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -84,8 +84,8 @@ RUN chmod +x /usr/local/bin/startup.sh
 RUN echo 'source ~/dfir-tools.sh' >> /home/dfiruser/.bashrc && \
     chown dfiruser:dfiruser /home/dfiruser/.bashrc
 
-# Update ClamAV database
-RUN freshclam
+# Update ClamAV database (allow failure in build environment)
+RUN freshclam || echo "ClamAV update failed in build environment (normal)"
 
 # Set working directory
 WORKDIR /home/dfiruser

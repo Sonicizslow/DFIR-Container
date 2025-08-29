@@ -6,16 +6,15 @@ services:
       - "6080:6080"  # noVNC web interface
       - "5901:5901"  # VNC server (optional direct access)
     volumes:
-      # Map host downloads folder as read-only
-      # Adjust this path to match your system's downloads folder
-      - "${HOME}/Downloads:/home/dfiruser/downloads:ro"
+      # Map host phishing folder as read-only
+      # Adjust this path to match your system's phishing analysis folder
+      - "${HOME}/phishing:/home/dfiruser/phishing:ro"
       # Optional: persistent analysis workspace
       - "./analysis-workspace:/home/dfiruser/analysis"
     environment:
       - DISPLAY=:1
     restart: unless-stopped
-    # Security: run as non-root user
-    user: "1000:1000"  # Adjust UID/GID as needed
+    # Security: no new privileges and resource limits  
     security_opt:
       - no-new-privileges:true
     # Resource limits for security
