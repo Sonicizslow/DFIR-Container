@@ -18,6 +18,23 @@ mkdir -p /home/dfiruser/.vnc
 chown -R dfiruser:dfiruser /home/dfiruser/.vnc 2>/dev/null || true
 chmod 700 /home/dfiruser/.vnc
 
+# Create Desktop directory and Firefox shortcut for easy access
+mkdir -p /home/dfiruser/Desktop
+cat > /home/dfiruser/Desktop/firefox.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Name=Firefox
+Comment=Web Browser
+Exec=firefox
+Icon=firefox
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+StartupNotify=true
+EOF
+chmod +x /home/dfiruser/Desktop/firefox.desktop
+chown -R dfiruser:dfiruser /home/dfiruser/Desktop 2>/dev/null || true
+
 # Kill any existing VNC sessions
 su - dfiruser -c "vncserver -kill :1" 2>/dev/null || true
 

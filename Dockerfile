@@ -10,8 +10,6 @@ RUN apt-get update && apt-get install -y \
     xfce4 xfce4-goodies \
     # VNC server and web interface
     tightvncserver novnc websockify \
-    # Web browsers
-    firefox \
     # Office and document tools
     libreoffice \
     evince \
@@ -33,11 +31,26 @@ RUN apt-get update && apt-get install -y \
     unzip p7zip-full \
     # Python for custom analysis
     python3 python3-pip \
+    # Clipboard management for copy/paste support
+    autocutsel xsel xclip \
     # System utilities
     sudo \
     supervisor \
+    # Required for installing Firefox manually
+    software-properties-common \
+    gnupg \
+    lsb-release \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Firefox from Mozilla's official repository
+RUN wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | apt-key add - && \
+    echo "deb https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list && \
+    echo 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000' | tee /etc/apt/preferences.d/mozilla && \
+    apt-get update && \
+    apt-get install -y firefox && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
@@ -60,6 +73,8 @@ RUN echo 'dfirpassword' | vncpasswd -f > /home/dfiruser/.vnc/passwd && \
 # Create xstartup file for VNC
 RUN echo '#!/bin/bash\n\
 xrdb $HOME/.Xresources\n\
+# Start clipboard management\n\
+autocutsel -selection PRIMARY &\n\
 startxfce4 &' > /home/dfiruser/.vnc/xstartup && \
     chmod +x /home/dfiruser/.vnc/xstartup && \
     chown dfiruser:dfiruser /home/dfiruser/.vnc/xstartup
@@ -67,6 +82,21 @@ startxfce4 &' > /home/dfiruser/.vnc/xstartup && \
 # Create directories for file analysis
 RUN mkdir -p /home/dfiruser/analysis /home/dfiruser/phishing && \
     chown -R dfiruser:dfiruser /home/dfiruser/analysis /home/dfiruser/phishing
+
+# Create desktop directory and Firefox shortcut for easy access
+RUN mkdir -p /home/dfiruser/Desktop && \
+    echo '[Desktop Entry]\n\
+Version=1.0\n\
+Name=Firefox\n\
+Comment=Web Browser\n\
+Exec=firefox\n\
+Icon=firefox\n\
+Terminal=false\n\
+Type=Application\n\
+Categories=Network;WebBrowser;\n\
+StartupNotify=true' > /home/dfiruser/Desktop/firefox.desktop && \
+    chmod +x /home/dfiruser/Desktop/firefox.desktop && \
+    chown -R dfiruser:dfiruser /home/dfiruser/Desktop
 
 # Configure supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
