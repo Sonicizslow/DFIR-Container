@@ -14,8 +14,7 @@ services:
     environment:
       - DISPLAY=:1
     restart: unless-stopped
-    # Security: run as non-root user
-    user: "1000:1000"  # Adjust UID/GID as needed
+    # Security: no new privileges and resource limits  
     security_opt:
       - no-new-privileges:true
     # Resource limits for security

@@ -84,8 +84,8 @@ Available commands:
 
 ## Security Considerations
 
-- Container runs as non-root user (`dfiruser`)
-- Downloads folder is mounted read-only
+- Container starts as root for setup, then services run as non-root user (`dfiruser`)  
+- Phishing folder is mounted read-only
 - Resource limits applied (2GB RAM, 2 CPU cores)
 - No new privileges allowed
 - ClamAV antivirus included for malware detection
