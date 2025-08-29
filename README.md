@@ -126,6 +126,12 @@ cpus: 4.0      # Increase CPU cores
 - Ensure your user ID matches the container user (1000:1000 by default)
 - Check volume mount permissions
 
+### Copy/Paste not working
+- Ensure your browser allows clipboard access for the noVNC interface
+- Click inside the noVNC window to focus it before copying/pasting
+- Use Ctrl+Shift+C/V instead of Ctrl+C/V in some terminal applications
+- Try refreshing the browser page if clipboard sync stops working
+
 ## Development
 
 To rebuild the container after making changes:

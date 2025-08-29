@@ -33,6 +33,8 @@ RUN apt-get update && apt-get install -y \
     unzip p7zip-full \
     # Python for custom analysis
     python3 python3-pip \
+    # Clipboard management for copy/paste support
+    autocutsel xsel xclip \
     # System utilities
     sudo \
     supervisor \
@@ -60,6 +62,8 @@ RUN echo 'dfirpassword' | vncpasswd -f > /home/dfiruser/.vnc/passwd && \
 # Create xstartup file for VNC
 RUN echo '#!/bin/bash\n\
 xrdb $HOME/.Xresources\n\
+# Start clipboard management\n\
+autocutsel -selection PRIMARY &\n\
 startxfce4 &' > /home/dfiruser/.vnc/xstartup && \
     chmod +x /home/dfiruser/.vnc/xstartup && \
     chown dfiruser:dfiruser /home/dfiruser/.vnc/xstartup
@@ -67,6 +71,21 @@ startxfce4 &' > /home/dfiruser/.vnc/xstartup && \
 # Create directories for file analysis
 RUN mkdir -p /home/dfiruser/analysis /home/dfiruser/phishing && \
     chown -R dfiruser:dfiruser /home/dfiruser/analysis /home/dfiruser/phishing
+
+# Create desktop directory and Firefox shortcut for easy access
+RUN mkdir -p /home/dfiruser/Desktop && \
+    echo '[Desktop Entry]\n\
+Version=1.0\n\
+Name=Firefox\n\
+Comment=Web Browser\n\
+Exec=firefox\n\
+Icon=firefox\n\
+Terminal=false\n\
+Type=Application\n\
+Categories=Network;WebBrowser;\n\
+StartupNotify=true' > /home/dfiruser/Desktop/firefox.desktop && \
+    chmod +x /home/dfiruser/Desktop/firefox.desktop && \
+    chown -R dfiruser:dfiruser /home/dfiruser/Desktop
 
 # Configure supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
