@@ -24,15 +24,15 @@ fi
 
 echo "✅ Docker and Docker Compose are available"
 
-# Check if downloads directory exists
-DOWNLOADS_DIR="${HOME}/Downloads"
-if [ ! -d "$DOWNLOADS_DIR" ]; then
-    echo "⚠️  Downloads directory not found at $DOWNLOADS_DIR"
-    echo "Creating downloads directory..."
-    mkdir -p "$DOWNLOADS_DIR"
+# Check if phishing directory exists
+PHISHING_DIR="${HOME}/phishing"
+if [ ! -d "$PHISHING_DIR" ]; then
+    echo "⚠️  Phishing directory not found at $PHISHING_DIR"
+    echo "Creating phishing directory..."
+    mkdir -p "$PHISHING_DIR"
 fi
 
-echo "✅ Downloads directory: $DOWNLOADS_DIR"
+echo "✅ Phishing directory: $PHISHING_DIR"
 
 # Build and start the container
 echo ""
@@ -57,7 +57,7 @@ if docker compose ps | grep -q "running"; then
     echo "   Open your web browser and go to: http://localhost:6080"
     echo ""
     echo "📁 File locations in the container:"
-    echo "   - Your downloads: /home/dfiruser/downloads (read-only)"
+    echo "   - Your phishing files: /home/dfiruser/phishing (read-only)"
     echo "   - Analysis workspace: /home/dfiruser/analysis"
     echo ""
     echo "🛠️  DFIR Tools:"
