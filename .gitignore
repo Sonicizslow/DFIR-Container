@@ -1,0 +1,16 @@
+# Docker build cache
+.dockerignore
+
+# Analysis workspace (user data)
+analysis-workspace/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db

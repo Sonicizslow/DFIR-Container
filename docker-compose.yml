@@ -1,0 +1,21 @@
+services:
+  dfir-container:
+    build: .
+    container_name: dfir-investigation
+    ports:
+      - "3391:3389"  # RDP server
+    volumes:
+      # Map host phishing folder as read-only
+      # Adjust this path to match your system's phishing analysis folder
+      - "${PHISHING_PATH:-${HOME}/phishing}:/home/dfiruser/phishing:ro"
+      # Map host Downloads folder to phishing/Downloads for easy access
+      - "${DOWNLOADS_PATH:-${HOME}/Downloads}:/home/dfiruser/phishing/Downloads:ro"
+      # Optional: persistent analysis workspace
+      - "./analysis-workspace:/home/dfiruser/analysis"
+    restart: unless-stopped
+    # Security: no new privileges and resource limits  
+    security_opt:
+      - no-new-privileges:true
+    # Resource limits for security
+    mem_limit: 2g
+    cpus: 2.0
