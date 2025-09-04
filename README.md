@@ -8,7 +8,7 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 - **Non-root Security**: Runs as a non-privileged user for enhanced security
 - **File Analysis Tools**: Includes tools for PDF, Office document, and general file analysis
 - **Malware Scanning**: Built-in ClamAV antivirus scanning
-- **Read-only Phishing Files**: Maps host phishing folder as read-only for safe file transfer
+- **Read-only Downloads Access**: Maps the phishing user's Downloads folder as read-only for safe file access
 - **Copy/Paste Support**: Full clipboard integration through RDP clients
 
 ## Quick Start
@@ -16,7 +16,7 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 ### Prerequisites
 
 - Docker and Docker Compose installed
-- A phishing folder on your host system (typically `~/phishing`)
+- A 'phishing' user account on your host system with a Downloads folder
 
 ### Setup and Launch
 
@@ -41,7 +41,7 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 
 ### Accessing Files
 
-- **Phishing Files**: Your host phishing folder is mounted at `/home/dfiruser/phishing` (read-only)
+- **Downloads**: The phishing user's Downloads folder is mounted at `/home/dfiruser/phishing/Downloads` (read-only)
 - **Analysis Workspace**: Use `/home/dfiruser/analysis` for your investigation work
 
 ### Built-in DFIR Tools
@@ -64,16 +64,14 @@ Available commands:
 
 ### Example Investigation Workflow
 
-1. **File Transfer**: Copy suspicious files to your phishing folder on the host
+1. **File Transfer**: Suspicious files should be placed in `/home/phishing/Downloads` on the host
 2. **Access Container**: Connect via RDP using any RDP client to `localhost:3391`
-3. **Navigate to Files**: Files are available in `/home/dfiruser/phishing`
-   - Phishing files: `/home/dfiruser/phishing`
-   - Downloaded files: `/home/dfiruser/phishing/Downloads`
+3. **Navigate to Files**: Files are available in `/home/dfiruser/phishing/Downloads`
 4. **Analyze**: Use the built-in tools or GUI applications:
    ```bash
    # In the container terminal:
    source ~/dfir-tools.sh
-   analyze-pdf ~/phishing/suspicious.pdf
+   analyze-pdf ~/phishing/Downloads/suspicious.pdf
    scan-malware ~/phishing/Downloads/document.docx
    ```
 
@@ -95,43 +93,15 @@ Available commands:
 
 ## Configuration
 
-### Custom Phishing Path
+### File Access
 
-You can customize the phishing folder path in two ways:
+The container is configured to access files from a fixed location:
+- Host path: `/home/phishing/Downloads` (the phishing user's Downloads folder)
+- Container path: `/home/dfiruser/phishing/Downloads` (read-only)
 
-**Option 1: Environment Variable (Recommended)**
-Create a `.env` file (copy from `.env.example`) and set:
-```bash
-PHISHING_PATH=/path/to/your/phishing
-```
-
-**Option 2: Direct Edit**
-Edit `docker-compose.yml` to change the phishing folder mapping:
-```yaml
-volumes:
-  - "/path/to/your/phishing:/home/dfiruser/phishing:ro"
-```
-
-The default path is `${HOME}/phishing` if no custom path is specified.
-
-### Custom Downloads Path
-
-The container automatically maps your Downloads folder to `/home/dfiruser/phishing/Downloads` for easy access to downloaded files. You can customize this path:
-
-**Option 1: Environment Variable (Recommended)**
-Create a `.env` file (copy from `.env.example`) and set:
-```bash
-DOWNLOADS_PATH=/path/to/your/downloads
-```
-
-**Option 2: Direct Edit**
-Edit `docker-compose.yml` to change the Downloads folder mapping:
-```yaml
-volumes:
-  - "/path/to/your/downloads:/home/dfiruser/phishing/Downloads:ro"
-```
-
-The default path is `${HOME}/Downloads` if no custom path is specified.
+Ensure that:
+1. A user named "phishing" exists on your host system
+2. The `/home/phishing/Downloads` directory exists and contains the files you want to analyze
 
 ### Resource Limits
 
@@ -147,14 +117,13 @@ cpus: 4.0      # Increase CPU cores
 ### Container won't start
 - Ensure Docker is running
 - Check if port 3391 is available
-- Verify your phishing folder exists
+- Verify the phishing user's Downloads folder exists at `/home/phishing/Downloads`
 
 ### Volume path errors
-If you see errors like `"service "dfir-container" refers to undefined volume home/phishing/Downloads: invalid compose project"`:
-- This indicates an incorrect volume path in `docker-compose.yml`
-- Ensure volume paths are absolute (start with `/` or use `${HOME}`)
-- The correct format is: `"${PHISHING_PATH:-${HOME}/phishing}:/home/dfiruser/phishing:ro"`
-- You can customize the path by setting the `PHISHING_PATH` environment variable
+If you see volume-related errors:
+- Ensure the phishing user exists on your host system
+- Verify `/home/phishing/Downloads` directory exists and is accessible
+- Check that the path `/home/phishing/Downloads` has appropriate permissions
 
 ### Can't connect via RDP
 - Ensure the container is running: `docker-compose ps`

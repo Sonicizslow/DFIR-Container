@@ -24,15 +24,15 @@ fi
 
 echo "✅ Docker and Docker Compose are available"
 
-# Check if phishing directory exists
-PHISHING_DIR="${HOME}/phishing"
-if [ ! -d "$PHISHING_DIR" ]; then
-    echo "⚠️  Phishing directory not found at $PHISHING_DIR"
-    echo "Creating phishing directory..."
-    mkdir -p "$PHISHING_DIR"
+# Check if phishing user's Downloads directory exists
+PHISHING_DOWNLOADS_DIR="/home/phishing/Downloads"
+if [ ! -d "$PHISHING_DOWNLOADS_DIR" ]; then
+    echo "⚠️  Phishing user's Downloads directory not found at $PHISHING_DOWNLOADS_DIR"
+    echo "Please ensure the 'phishing' user exists and has a Downloads folder."
+    echo "This directory will be mounted read-only in the container."
 fi
 
-echo "✅ Phishing directory: $PHISHING_DIR"
+echo "✅ Configuration checked: $PHISHING_DOWNLOADS_DIR"
 
 # Build and start the container
 echo ""
@@ -59,8 +59,7 @@ if docker compose ps | grep -q "Up"; then
     echo "   Password: dfirpassword"
     echo ""
     echo "📁 File locations in the container:"
-    echo "   - Your phishing files: /home/dfiruser/phishing (read-only)"
-    echo "   - Your downloads: /home/dfiruser/phishing/Downloads (read-only)"
+    echo "   - Phishing user's downloads: /home/dfiruser/phishing/Downloads (read-only)"
     echo "   - Analysis workspace: /home/dfiruser/analysis"
     echo ""
     echo "🛠️  DFIR Tools:"
