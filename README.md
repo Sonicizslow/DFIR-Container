@@ -66,7 +66,7 @@ Available commands:
 ### Example Investigation Workflow
 
 1. **File Transfer**: Copy suspicious files to your phishing folder on the host
-2. **Access Container**: Open browser to `http://localhost:6080`
+2. **Access Container**: Connect via RDP using `./connect-rdp.sh` or any RDP client to `localhost:3389`
 3. **Navigate to Files**: Files are available in `/home/dfiruser/phishing`
 4. **Analyze**: Use the built-in tools or GUI applications:
    ```bash
