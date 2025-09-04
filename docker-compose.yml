@@ -7,11 +7,11 @@ services:
     volumes:
       # Map host phishing folder as read-only
       # Adjust this path to match your system's phishing analysis folder
-      - "${PHISHING_PATH:-${HOME}/phishing}:/home/dfiruser/phishing:ro"
+     # - "${PHISHING_PATH:-${HOME}/phishing}:/home/dfiruser/phishing:ro"
       # Map host Downloads folder to phishing/Downloads for easy access
-      - "${DOWNLOADS_PATH:-${HOME}/Downloads}:/home/dfiruser/phishing/Downloads:ro"
+      - "${DOWNLOADS_PATH:-${HOME}/phishing/Downloads}:/home/dfiruser/phishing/Downloads:ro"
       # Optional: persistent analysis workspace
-      - "./analysis-workspace:/home/dfiruser/analysis"
+     # - "./analysis-workspace:/home/dfiruser/analysis"
     restart: unless-stopped
     # Security: no new privileges and resource limits  
     security_opt:
