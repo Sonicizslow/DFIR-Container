@@ -32,9 +32,8 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
    ```
 
 3. Access the container:
-   - Use the RDP connection script: `./connect-rdp.sh`
-   - Or connect manually using any RDP client:
-     - Host: `localhost:3389`
+   - Connect using any RDP client:
+     - Host: `localhost:3391`
      - Username: `dfiruser`
      - Password: `dfirpassword`
 
@@ -66,7 +65,7 @@ Available commands:
 ### Example Investigation Workflow
 
 1. **File Transfer**: Copy suspicious files to your phishing folder on the host
-2. **Access Container**: Connect via RDP using `./connect-rdp.sh` or any RDP client to `localhost:3389`
+2. **Access Container**: Connect via RDP using any RDP client to `localhost:3391`
 3. **Navigate to Files**: Files are available in `/home/dfiruser/phishing`
 4. **Analyze**: Use the built-in tools or GUI applications:
    ```bash
@@ -116,14 +115,13 @@ cpus: 4.0      # Increase CPU cores
 
 ### Container won't start
 - Ensure Docker is running
-- Check if port 3389 is available
+- Check if port 3391 is available
 - Verify your phishing folder exists
 
 ### Can't connect via RDP
 - Ensure the container is running: `docker-compose ps`
-- Check if port 3389 is accessible: `netstat -an | grep 3389`
+- Check if port 3391 is accessible: `netstat -an | grep 3391`
 - Review logs: `docker-compose logs`
-- Try using the connection script: `./connect-rdp.sh`
 
 ### Permission issues
 - Ensure your user ID matches the container user (1000:1000 by default)

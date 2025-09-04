@@ -3,7 +3,7 @@ services:
     build: .
     container_name: dfir-investigation
     ports:
-      - "3389:3389"  # RDP server
+      - "3391:3389"  # RDP server
     volumes:
       # Map host phishing folder as read-only
       # Adjust this path to match your system's phishing analysis folder
