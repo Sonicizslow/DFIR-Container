@@ -9,7 +9,7 @@ services:
       # Adjust this path to match your system's phishing analysis folder
       - "home/phishing/Downloads:/home/dfiruser/phishing:ro"
       # Optional: persistent analysis workspace
-    #  - "./analysis-workspace:/home/dfiruser/analysis"
+      - "./analysis-workspace:/home/dfiruser/analysis"
     restart: unless-stopped
     # Security: no new privileges and resource limits  
     security_opt:
