@@ -43,14 +43,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Firefox from Mozilla's official repository
-RUN wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | apt-key add - && \
-    echo "deb https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list && \
-    echo 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000' | tee /etc/apt/preferences.d/mozilla && \
-    apt-get update && \
-    apt-get install -y firefox && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Note: Firefox can be installed using the install-firefox.sh script after container startup
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
