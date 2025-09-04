@@ -95,12 +95,22 @@ Available commands:
 
 ### Custom Phishing Path
 
-Edit `docker-compose.yml` to change the phishing folder mapping:
+You can customize the phishing folder path in two ways:
 
+**Option 1: Environment Variable (Recommended)**
+Create a `.env` file (copy from `.env.example`) and set:
+```bash
+PHISHING_PATH=/path/to/your/phishing
+```
+
+**Option 2: Direct Edit**
+Edit `docker-compose.yml` to change the phishing folder mapping:
 ```yaml
 volumes:
   - "/path/to/your/phishing:/home/dfiruser/phishing:ro"
 ```
+
+The default path is `${HOME}/phishing` if no custom path is specified.
 
 ### Resource Limits
 
@@ -117,6 +127,13 @@ cpus: 4.0      # Increase CPU cores
 - Ensure Docker is running
 - Check if port 3391 is available
 - Verify your phishing folder exists
+
+### Volume path errors
+If you see errors like `"service "dfir-container" refers to undefined volume home/phishing/Downloads: invalid compose project"`:
+- This indicates an incorrect volume path in `docker-compose.yml`
+- Ensure volume paths are absolute (start with `/` or use `${HOME}`)
+- The correct format is: `"${PHISHING_PATH:-${HOME}/phishing}:/home/dfiruser/phishing:ro"`
+- You can customize the path by setting the `PHISHING_PATH` environment variable
 
 ### Can't connect via RDP
 - Ensure the container is running: `docker-compose ps`
