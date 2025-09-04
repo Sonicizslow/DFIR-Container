@@ -49,7 +49,7 @@ echo "⏳ Waiting for container to be ready..."
 sleep 10
 
 # Check if container is running
-if docker compose ps | grep -q "running"; then
+if docker compose ps | grep -q "Up"; then
     echo ""
     echo "✅ DFIR Container is running!"
     echo ""
