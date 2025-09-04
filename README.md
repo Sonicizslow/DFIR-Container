@@ -67,12 +67,14 @@ Available commands:
 1. **File Transfer**: Copy suspicious files to your phishing folder on the host
 2. **Access Container**: Connect via RDP using any RDP client to `localhost:3391`
 3. **Navigate to Files**: Files are available in `/home/dfiruser/phishing`
+   - Phishing files: `/home/dfiruser/phishing`
+   - Downloaded files: `/home/dfiruser/phishing/Downloads`
 4. **Analyze**: Use the built-in tools or GUI applications:
    ```bash
    # In the container terminal:
    source ~/dfir-tools.sh
    analyze-pdf ~/phishing/suspicious.pdf
-   scan-malware ~/phishing/document.docx
+   scan-malware ~/phishing/Downloads/document.docx
    ```
 
 ### Available Applications
@@ -111,6 +113,25 @@ volumes:
 ```
 
 The default path is `${HOME}/phishing` if no custom path is specified.
+
+### Custom Downloads Path
+
+The container automatically maps your Downloads folder to `/home/dfiruser/phishing/Downloads` for easy access to downloaded files. You can customize this path:
+
+**Option 1: Environment Variable (Recommended)**
+Create a `.env` file (copy from `.env.example`) and set:
+```bash
+DOWNLOADS_PATH=/path/to/your/downloads
+```
+
+**Option 2: Direct Edit**
+Edit `docker-compose.yml` to change the Downloads folder mapping:
+```yaml
+volumes:
+  - "/path/to/your/downloads:/home/dfiruser/phishing/Downloads:ro"
+```
+
+The default path is `${HOME}/Downloads` if no custom path is specified.
 
 ### Resource Limits
 

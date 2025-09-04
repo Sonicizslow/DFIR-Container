@@ -60,6 +60,7 @@ if docker compose ps | grep -q "Up"; then
     echo ""
     echo "📁 File locations in the container:"
     echo "   - Your phishing files: /home/dfiruser/phishing (read-only)"
+    echo "   - Your downloads: /home/dfiruser/phishing/Downloads (read-only)"
     echo "   - Analysis workspace: /home/dfiruser/analysis"
     echo ""
     echo "🛠️  DFIR Tools:"
