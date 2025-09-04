@@ -8,8 +8,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     # Desktop environment
     xfce4 xfce4-goodies \
-    # VNC server and web interface
-    tightvncserver novnc websockify \
+    # RDP server
+    xrdp \
     # Office and document tools
     libreoffice \
     evince \
@@ -62,22 +62,12 @@ RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.pyth
 
 # Create non-root user for DFIR work
 RUN useradd -m -s /bin/bash -G sudo dfiruser && \
-    echo 'dfiruser:dfirpassword' | chpasswd && \
-    mkdir -p /home/dfiruser/.vnc
+    echo 'dfiruser:dfirpassword' | chpasswd
 
-# Configure VNC
-RUN echo 'dfirpassword' | vncpasswd -f > /home/dfiruser/.vnc/passwd && \
-    chmod 600 /home/dfiruser/.vnc/passwd && \
-    chown -R dfiruser:dfiruser /home/dfiruser/.vnc
-
-# Create xstartup file for VNC
-RUN echo '#!/bin/bash\n\
-xrdb $HOME/.Xresources\n\
-# Start clipboard management\n\
-autocutsel -selection PRIMARY &\n\
-startxfce4 &' > /home/dfiruser/.vnc/xstartup && \
-    chmod +x /home/dfiruser/.vnc/xstartup && \
-    chown dfiruser:dfiruser /home/dfiruser/.vnc/xstartup
+# Configure XRDP for XFCE4
+RUN echo 'xfce4-session' > /home/dfiruser/.xsession && \
+    chown dfiruser:dfiruser /home/dfiruser/.xsession && \
+    chmod +x /home/dfiruser/.xsession
 
 # Create directories for file analysis
 RUN mkdir -p /home/dfiruser/analysis /home/dfiruser/phishing && \
@@ -120,10 +110,7 @@ RUN freshclam || echo "ClamAV update failed in build environment (normal)"
 # Set working directory
 WORKDIR /home/dfiruser
 
-# Set VNC display
-ENV DISPLAY=:1
-
-EXPOSE 5901 6080
+EXPOSE 3389
 
 # Use startup script to ensure proper initialization
 CMD ["/usr/local/bin/startup.sh"]

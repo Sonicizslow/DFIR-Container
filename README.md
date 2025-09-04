@@ -4,12 +4,12 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 
 ## Features
 
-- **Web-based Access**: Access the container through your browser using noVNC
+- **RDP Access**: Secure Remote Desktop Protocol access to the container desktop
 - **Non-root Security**: Runs as a non-privileged user for enhanced security
 - **File Analysis Tools**: Includes tools for PDF, Office document, and general file analysis
 - **Malware Scanning**: Built-in ClamAV antivirus scanning
 - **Read-only Phishing Files**: Maps host phishing folder as read-only for safe file transfer
-- **Copy/Paste Support**: Full clipboard integration with the host browser
+- **Copy/Paste Support**: Full clipboard integration through RDP clients
 
 ## Quick Start
 
@@ -32,9 +32,11 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
    ```
 
 3. Access the container:
-   - Open your web browser
-   - Navigate to `http://localhost:6080`
-   - Click "Connect" to access the desktop environment
+   - Use the RDP connection script: `./connect-rdp.sh`
+   - Or connect manually using any RDP client:
+     - Host: `localhost:3389`
+     - Username: `dfiruser`
+     - Password: `dfirpassword`
 
 ## Usage
 
@@ -64,7 +66,7 @@ Available commands:
 ### Example Investigation Workflow
 
 1. **File Transfer**: Copy suspicious files to your phishing folder on the host
-2. **Access Container**: Open browser to `http://localhost:6080`
+2. **Access Container**: Connect via RDP using `./connect-rdp.sh` or any RDP client to `localhost:3389`
 3. **Navigate to Files**: Files are available in `/home/dfiruser/phishing`
 4. **Analyze**: Use the built-in tools or GUI applications:
    ```bash
@@ -114,23 +116,24 @@ cpus: 4.0      # Increase CPU cores
 
 ### Container won't start
 - Ensure Docker is running
-- Check if ports 6080 and 5901 are available
+- Check if port 3389 is available
 - Verify your phishing folder exists
 
-### Can't connect via browser
-- Try `http://localhost:6080/vnc.html`
-- Check if the container is running: `docker-compose ps`
+### Can't connect via RDP
+- Ensure the container is running: `docker-compose ps`
+- Check if port 3389 is accessible: `netstat -an | grep 3389`
 - Review logs: `docker-compose logs`
+- Try using the connection script: `./connect-rdp.sh`
 
 ### Permission issues
 - Ensure your user ID matches the container user (1000:1000 by default)
 - Check volume mount permissions
 
 ### Copy/Paste not working
-- Ensure your browser allows clipboard access for the noVNC interface
-- Click inside the noVNC window to focus it before copying/pasting
-- Use Ctrl+Shift+C/V instead of Ctrl+C/V in some terminal applications
-- Try refreshing the browser page if clipboard sync stops working
+- Enable clipboard sharing in your RDP client settings
+- On Windows: Check "Clipboard" in Remote Desktop Connection
+- On Linux: Use the `/clipboard` parameter with FreeRDP
+- On macOS: Enable clipboard in Microsoft Remote Desktop settings
 
 ### Firefox not working
 - The default Firefox installation is a transitional snap package that may not work in containers
