@@ -13,10 +13,8 @@ chown dfiruser:dfiruser /home/dfiruser/dfir-tools.sh 2>/dev/null || true
 mkdir -p /home/dfiruser/analysis
 chown dfiruser:dfiruser /home/dfiruser/analysis 2>/dev/null || true
 
-# Ensure VNC directories have correct permissions
-mkdir -p /home/dfiruser/.vnc
-chown -R dfiruser:dfiruser /home/dfiruser/.vnc 2>/dev/null || true
-chmod 700 /home/dfiruser/.vnc
+# Ensure XRDP configuration has correct permissions
+chown dfiruser:dfiruser /home/dfiruser/.xsession 2>/dev/null || true
 
 # Create Desktop directory and Firefox shortcut for easy access
 mkdir -p /home/dfiruser/Desktop
@@ -34,9 +32,6 @@ StartupNotify=true
 EOF
 chmod +x /home/dfiruser/Desktop/firefox.desktop
 chown -R dfiruser:dfiruser /home/dfiruser/Desktop 2>/dev/null || true
-
-# Kill any existing VNC sessions
-su - dfiruser -c "vncserver -kill :1" 2>/dev/null || true
 
 # Start supervisord
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
