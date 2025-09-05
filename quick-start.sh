@@ -43,34 +43,40 @@ echo ""
 echo "🚀 Starting DFIR container..."
 docker compose up -d
 
-# Wait for container to be ready
+# Wait for containers to be ready
 echo ""
-echo "⏳ Waiting for container to be ready..."
+echo "⏳ Waiting for containers to be ready..."
 sleep 10
 
-# Check if container is running
+# Check if containers are running
 if docker compose ps | grep -q "Up"; then
     echo ""
-    echo "✅ DFIR Container is running!"
+    echo "✅ DFIR Containers are running!"
     echo ""
-    echo "🖥️  Access the container:"
-    echo "   Connect using any RDP client to: localhost:3391"
-    echo "   Username: dfiruser"
-    echo "   Password: dfirpassword"
+    echo "🖥️  Access the containers:"
+    echo "   Main DFIR Analysis Container:"
+    echo "     Connect using any RDP client to: localhost:3391"
+    echo "     Username: dfiruser"
+    echo "     Password: dfirpassword"
     echo ""
-    echo "📁 File locations in the container:"
+    echo "   Browser Container (for link investigation):"
+    echo "     Connect using any RDP client to: localhost:3392"
+    echo "     Username: dfiruser"
+    echo "     Password: dfirpassword"
+    echo ""
+    echo "📁 File locations in the containers:"
     echo "   - Phishing user's downloads: /home/dfiruser/phishing/Downloads (read-only)"
-    echo "   - Analysis workspace: /home/dfiruser/analysis"
+    echo "   - Analysis workspace: /home/dfiruser/analysis (main container only)"
     echo ""
     echo "🛠️  DFIR Tools:"
-    echo "   Open a terminal in the container and run: source ~/dfir-tools.sh"
+    echo "   Open a terminal in the main container and run: source ~/dfir-tools.sh"
     echo ""
     echo "📖 For detailed usage instructions, see README.md"
     echo ""
-    echo "🛑 To stop the container: docker compose down"
+    echo "🛑 To stop the containers: docker compose down"
 else
     echo ""
-    echo "❌ Container failed to start properly"
+    echo "❌ Containers failed to start properly"
     echo "Check the logs with: docker compose logs"
     exit 1
 fi

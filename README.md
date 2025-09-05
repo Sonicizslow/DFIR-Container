@@ -4,8 +4,9 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
 
 ## Features
 
-- **RDP Access**: Secure Remote Desktop Protocol access to the container desktop
+- **RDP Access**: Secure Remote Desktop Protocol access to container desktops
 - **Non-root Security**: Runs as a non-privileged user for enhanced security
+- **Separate Browser Container**: Dedicated browser container with proper permissions for web investigation
 - **File Analysis Tools**: Includes tools for PDF, Office document, and general file analysis
 - **Malware Scanning**: Built-in ClamAV antivirus scanning
 - **Read-only Downloads Access**: Maps the phishing user's Downloads folder as read-only for safe file access
@@ -26,14 +27,18 @@ A Docker container for Digital Forensics and Incident Response (DFIR) investigat
    cd DFIR-Container
    ```
 
-2. Start the container:
+2. Start the containers:
    ```bash
    docker-compose up -d
    ```
 
-3. Access the container:
-   - Connect using any RDP client:
+3. Access the containers:
+   - **Main DFIR Analysis Container**:
      - Host: `localhost:3391`
+     - Username: `dfiruser`
+     - Password: `dfirpassword`
+   - **Browser Container** (for link investigation):
+     - Host: `localhost:3392`
      - Username: `dfiruser`
      - Password: `dfirpassword`
 
@@ -77,19 +82,23 @@ Available commands:
 
 ### Available Applications
 
-- **Web Browser**: Epiphany (GNOME Web) browser for link investigation, accessible via `epiphany` command
+**Main DFIR Container:**
 - **LibreOffice**: Office document analysis
 - **Evince**: PDF viewer
 - **Text Editors**: nano, vim for file inspection
 - **Hex Editors**: hexedit for binary analysis
 
+**Browser Container:**
+- **Epiphany (GNOME Web)**: Dedicated web browser for link investigation with proper sandboxing support
+
 ## Security Considerations
 
-- Container starts as root for setup, then services run as non-root user (`dfiruser`)  
-- Phishing folder is mounted read-only
-- Resource limits applied (2GB RAM, 2 CPU cores)
-- No new privileges allowed
+- **Main DFIR Container**: Runs with strict security (`no-new-privileges:true`) for safe file analysis
+- **Browser Container**: Runs with minimal additional privileges needed for browser sandboxing
+- Phishing folder is mounted read-only in both containers
+- Resource limits applied (Main: 2GB RAM, 2 CPU cores; Browser: 1GB RAM, 1 CPU core)
 - ClamAV antivirus included for malware detection
+- Both containers run services as non-root user (`dfiruser`)
 
 ## Configuration
 
@@ -116,7 +125,7 @@ cpus: 4.0      # Increase CPU cores
 
 ### Container won't start
 - Ensure Docker is running
-- Check if port 3391 is available
+- Check if ports 3391 and 3392 are available
 - Verify the phishing user's Downloads folder exists at `/home/phishing/Downloads`
 
 ### Volume path errors
@@ -126,13 +135,20 @@ If you see volume-related errors:
 - Check that the path `/home/phishing/Downloads` has appropriate permissions
 
 ### Can't connect via RDP
-- Ensure the container is running: `docker-compose ps`
-- Check if port 3391 is accessible: `netstat -an | grep 3391`
+- Ensure the containers are running: `docker-compose ps`
+- Check if ports are accessible: 
+  - Main container: `netstat -an | grep 3391`
+  - Browser container: `netstat -an | grep 3392`
 - Review logs: `docker-compose logs`
 
 ### Permission issues
 - Ensure your user ID matches the container user (1000:1000 by default)
 - Check volume mount permissions
+
+### Browser issues
+- If browser fails to start with namespace errors, ensure you're using the dedicated browser container on port 3392
+- The main container (port 3391) no longer includes a browser for security reasons
+- Browser container has the necessary permissions for Epiphany's sandboxing requirements
 
 ### Copy/Paste not working
 - Enable clipboard sharing in your RDP client settings

@@ -13,6 +13,8 @@ echo "  extract-metadata <file> - Extract metadata from file"
 echo "  hex-view <file>        - View file in hex editor"
 echo "  file-info <file>       - Get detailed file information"
 echo ""
+echo "📌 Note: For web browser access, use the separate browser container on port 3392"
+echo ""
 
 analyze_pdf() {
     if [ -z "$1" ]; then
