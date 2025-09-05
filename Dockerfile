@@ -43,7 +43,11 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Note: Firefox can be installed using the install-firefox.sh script after container startup
+# Install Firefox by running installation script during build
+COPY install-firefox.sh /tmp/install-firefox.sh
+RUN chmod +x /tmp/install-firefox.sh && \
+    /tmp/install-firefox.sh && \
+    rm /tmp/install-firefox.sh
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
