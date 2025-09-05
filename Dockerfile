@@ -36,18 +36,17 @@ RUN apt-get update && apt-get install -y \
     # System utilities
     sudo \
     supervisor \
-    # Required for installing Firefox manually
+    # Required for various analysis tools
     software-properties-common \
     gnupg \
     lsb-release \
+    # Web browser for link investigation
+    lynx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Firefox by running installation script during build
-COPY install-firefox.sh /tmp/install-firefox.sh
-RUN chmod +x /tmp/install-firefox.sh && \
-    /tmp/install-firefox.sh && \
-    rm /tmp/install-firefox.sh
+# Create firefox symlink to lynx for compatibility with existing shortcuts
+RUN ln -sf /usr/bin/lynx /usr/bin/firefox
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
