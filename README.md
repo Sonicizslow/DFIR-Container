@@ -77,7 +77,7 @@ Available commands:
 
 ### Available Applications
 
-- **Firefox**: Web browser for link investigation (automatically installed)
+- **Web Browser**: Epiphany (GNOME Web) browser for link investigation, accessible via `firefox` command
 - **LibreOffice**: Office document analysis
 - **Evince**: PDF viewer
 - **Text Editors**: nano, vim for file inspection
