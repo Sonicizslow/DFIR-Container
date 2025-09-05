@@ -16,3 +16,19 @@ services:
     # Resource limits for security
     mem_limit: 2g
     cpus: 2.0
+
+  dfir-browser:
+    build:
+      context: .
+      dockerfile: Dockerfile.browser
+    container_name: dfir-browser
+    ports:
+      - "3392:3389"  # RDP server for browser access
+    volumes:
+      # Map phishing user's Downloads folder as read-only (same as main container)
+      - "/home/phishing/Downloads:/home/dfiruser/phishing/Downloads:ro"
+    restart: unless-stopped
+    # Browser needs user namespaces for sandboxing, so fewer restrictions
+    # Resource limits for security
+    mem_limit: 1g
+    cpus: 1.0

@@ -40,12 +40,10 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     gnupg \
     lsb-release \
-    # Web browser for link investigation
-    epiphany-browser \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Web browser is epiphany-browser, available via 'epiphany' command
+# Note: Web browser moved to separate dfir-browser container
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
@@ -68,20 +66,7 @@ RUN echo 'xfce4-session' > /home/dfiruser/.xsession && \
 RUN mkdir -p /home/dfiruser/analysis /home/dfiruser/phishing && \
     chown -R dfiruser:dfiruser /home/dfiruser/analysis /home/dfiruser/phishing
 
-# Create desktop directory and Epiphany web browser shortcut for easy access
-RUN mkdir -p /home/dfiruser/Desktop && \
-    echo '[Desktop Entry]\n\
-Version=1.0\n\
-Name=Epiphany Web Browser\n\
-Comment=Web Browser for Link Investigation\n\
-Exec=epiphany\n\
-Icon=epiphany\n\
-Terminal=false\n\
-Type=Application\n\
-Categories=Network;WebBrowser;\n\
-StartupNotify=true' > /home/dfiruser/Desktop/epiphany.desktop && \
-    chmod +x /home/dfiruser/Desktop/epiphany.desktop && \
-    chown -R dfiruser:dfiruser /home/dfiruser/Desktop
+# Note: Browser shortcuts moved to separate dfir-browser container
 
 # Configure supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
