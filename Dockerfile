@@ -41,12 +41,12 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     lsb-release \
     # Web browser for link investigation
-    lynx \
+    epiphany-browser \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create firefox symlink to lynx for compatibility with existing shortcuts
-RUN ln -sf /usr/bin/lynx /usr/bin/firefox
+# Create firefox symlink to epiphany for compatibility with existing shortcuts
+RUN ln -sf /usr/bin/epiphany /usr/bin/firefox
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
