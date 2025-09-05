@@ -77,7 +77,7 @@ Available commands:
 
 ### Available Applications
 
-- **Firefox**: Web browser for link investigation (run `./install-firefox.sh` as root in container to install working Firefox)
+- **Firefox**: Web browser for link investigation (automatically installed)
 - **LibreOffice**: Office document analysis
 - **Evince**: PDF viewer
 - **Text Editors**: nano, vim for file inspection
@@ -139,11 +139,6 @@ If you see volume-related errors:
 - On Windows: Check "Clipboard" in Remote Desktop Connection
 - On Linux: Use the `/clipboard` parameter with FreeRDP
 - On macOS: Enable clipboard in Microsoft Remote Desktop settings
-
-### Firefox not working
-- The default Firefox installation is a transitional snap package that may not work in containers
-- To install working Firefox, run as root in the container: `./install-firefox.sh`
-- Alternatively, access the container and run: `docker compose exec dfir-container bash` then run the install script
 
 ## Development
 
