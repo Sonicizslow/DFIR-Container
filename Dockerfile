@@ -45,8 +45,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create firefox symlink to epiphany for compatibility with existing shortcuts
-RUN ln -sf /usr/bin/epiphany /usr/bin/firefox
+# Web browser is epiphany-browser, available via 'epiphany' command
 
 # Install Python packages for document analysis
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
@@ -69,19 +68,19 @@ RUN echo 'xfce4-session' > /home/dfiruser/.xsession && \
 RUN mkdir -p /home/dfiruser/analysis /home/dfiruser/phishing && \
     chown -R dfiruser:dfiruser /home/dfiruser/analysis /home/dfiruser/phishing
 
-# Create desktop directory and Firefox shortcut for easy access
+# Create desktop directory and Epiphany web browser shortcut for easy access
 RUN mkdir -p /home/dfiruser/Desktop && \
     echo '[Desktop Entry]\n\
 Version=1.0\n\
-Name=Firefox\n\
-Comment=Web Browser\n\
-Exec=firefox\n\
-Icon=firefox\n\
+Name=Epiphany Web Browser\n\
+Comment=Web Browser for Link Investigation\n\
+Exec=epiphany\n\
+Icon=epiphany\n\
 Terminal=false\n\
 Type=Application\n\
 Categories=Network;WebBrowser;\n\
-StartupNotify=true' > /home/dfiruser/Desktop/firefox.desktop && \
-    chmod +x /home/dfiruser/Desktop/firefox.desktop && \
+StartupNotify=true' > /home/dfiruser/Desktop/epiphany.desktop && \
+    chmod +x /home/dfiruser/Desktop/epiphany.desktop && \
     chown -R dfiruser:dfiruser /home/dfiruser/Desktop
 
 # Configure supervisor

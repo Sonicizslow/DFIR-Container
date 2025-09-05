@@ -16,21 +16,21 @@ chown dfiruser:dfiruser /home/dfiruser/analysis 2>/dev/null || true
 # Ensure XRDP configuration has correct permissions
 chown dfiruser:dfiruser /home/dfiruser/.xsession 2>/dev/null || true
 
-# Create Desktop directory and Firefox shortcut for easy access
+# Create Desktop directory and Epiphany web browser shortcut for easy access
 mkdir -p /home/dfiruser/Desktop
-cat > /home/dfiruser/Desktop/firefox.desktop << 'EOF'
+cat > /home/dfiruser/Desktop/epiphany.desktop << 'EOF'
 [Desktop Entry]
 Version=1.0
-Name=Firefox
-Comment=Web Browser
-Exec=firefox
-Icon=firefox
+Name=Epiphany Web Browser
+Comment=Web Browser for Link Investigation
+Exec=epiphany
+Icon=epiphany
 Terminal=false
 Type=Application
 Categories=Network;WebBrowser;
 StartupNotify=true
 EOF
-chmod +x /home/dfiruser/Desktop/firefox.desktop
+chmod +x /home/dfiruser/Desktop/epiphany.desktop
 chown -R dfiruser:dfiruser /home/dfiruser/Desktop 2>/dev/null || true
 
 # Start supervisord
